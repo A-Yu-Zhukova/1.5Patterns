@@ -1,24 +1,13 @@
-package ru.netology.patterns;
+package ru.netology.patterns.data;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import ru.netology.patterns.RegistrationByCardInfo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.exactText;
@@ -41,23 +30,15 @@ public class FormTestV1 {
         info = DataGenerator.Registration.generateByCard("ru");
     }
 
-    private String getDate(int daysForward) {
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, daysForward);
-        Date dt = calendar.getTime();
-        return dateFormat.format(dt).toString();
-    }
-
     @Test
     void testCorrect() {
-        String meetDate = getDate(3);
+        String meetDate = DataGenerator.Registration.getMeetDate(3);
         String expected = "Встреча успешно запланирована на " + meetDate;
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(replanInfo.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(replanInfo.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(meetDate);
         form.$("[data-test-id=name] input").setValue(replanInfo.getName());
         form.$("[data-test-id=phone] input").setValue(replanInfo.getPhone());
         form.$("[data-test-id=agreement]").click();
@@ -69,13 +50,13 @@ public class FormTestV1 {
 
     @Test
     void testReplan() {
-        String meetDate = getDate(3);
+        String meetDate = DataGenerator.Registration.getMeetDate(3);
         String expected = "Встреча успешно запланирована на " + meetDate;
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(replanInfo.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(replanInfo.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(meetDate);
         form.$("[data-test-id=name] input").setValue(replanInfo.getName());
         form.$("[data-test-id=phone] input").setValue(replanInfo.getPhone());
         form.$("[data-test-id=agreement]").click();
@@ -92,10 +73,10 @@ public class FormTestV1 {
     void testBadCity() {
         String expected = "Доставка в выбранный город недоступна";
         SelenideElement form = $("form");
-        form.$("[data-test-id=city] input").setValue("Малые упыри");
+        form.$("[data-test-id=city] input").setValue(DataGenerator.Registration.getBadCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(info.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(DataGenerator.Registration.getMeetDate(3));
         form.$("[data-test-id=name] input").setValue(info.getName());
         form.$("[data-test-id=phone] input").setValue(info.getPhone());
         form.$("[data-test-id=agreement]").click();
@@ -106,7 +87,7 @@ public class FormTestV1 {
 
     @Test
     void testBadDate() {
-        String meetDate = getDate(1);
+        String meetDate = DataGenerator.Registration.getMeetDate(1);
         String expected = "Заказ на выбранную дату невозможен";
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(info.getCity());
@@ -123,15 +104,14 @@ public class FormTestV1 {
 
     @Test
     void testBadName() {
-        String meetDate = getDate(3);
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(info.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(info.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(DataGenerator.Registration.getMeetDate(3));
         form.$("[data-test-id=phone] input").setValue(info.getPhone());
-        form.$("[data-test-id=name] input").setValue("Vasya");
+        form.$("[data-test-id=name] input").setValue(DataGenerator.Registration.getBadName());
         form.$("[data-test-id=agreement]").click();
         form.$("button.button_view_extra").click();
         $("[data-test-id=name]").shouldHave(cssClass("input_invalid"));
@@ -140,12 +120,11 @@ public class FormTestV1 {
 
     @Test
     void testBadAgreement() {
-        String meetDate = getDate(3);
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(info.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(info.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(DataGenerator.Registration.getMeetDate(3));
         form.$("[data-test-id=name] input").setValue(info.getName());
         form.$("[data-test-id=phone] input").setValue(info.getPhone());
         form.$("button.button_view_extra").click();
@@ -154,15 +133,14 @@ public class FormTestV1 {
 
     @Test
     void testBadPhone() {
-        String meetDate = getDate(3);
         String expected = "Поле обязательно для заполнения";
         SelenideElement form = $("form");
         form.$("[data-test-id=city] input").setValue(info.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
-        form.$("[data-test-id=date] input").setValue(info.getMeetDate());
+        form.$("[data-test-id=date] input").setValue(DataGenerator.Registration.getMeetDate(3));
         form.$("[data-test-id=name] input").setValue(info.getName());
-        form.$("[data-test-id=phone] input").setValue("");
+        form.$("[data-test-id=phone] input").setValue(DataGenerator.Registration.getBadPhone());
         form.$("[data-test-id=agreement]").click();
         form.$("button.button_view_extra").click();
         $("[data-test-id=phone]").shouldHave(cssClass("input_invalid"));
