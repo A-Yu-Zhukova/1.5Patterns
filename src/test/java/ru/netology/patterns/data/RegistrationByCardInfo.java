@@ -1,4 +1,4 @@
-package ru.netology.patterns;
+package ru.netology.patterns.data;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

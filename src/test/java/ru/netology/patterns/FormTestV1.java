@@ -1,11 +1,12 @@
-package ru.netology.patterns.data;
+package ru.netology.patterns;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import ru.netology.patterns.RegistrationByCardInfo;
+import ru.netology.patterns.data.RegistrationByCardInfo;
+import ru.netology.patterns.data.DataGenerator;
 
 import java.time.Duration;
 
