@@ -20,14 +20,13 @@ public class FormTestV1 {
     static RegistrationByCardInfo info;
 
     @BeforeAll
-    static void setUpReplan() {
+    static void setUpInfo() {
         info = DataGenerator.Registration.generateByCard("ru");
     }
 
     @BeforeEach
     void setUp() {
         open("http://localhost:9999");
-        info = DataGenerator.Registration.generateByCard("ru");
     }
 
     @Test
