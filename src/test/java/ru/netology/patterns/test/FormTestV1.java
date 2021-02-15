@@ -1,4 +1,4 @@
-package ru.netology.patterns;
+package ru.netology.patterns.test;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,12 +17,11 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class FormTestV1 {
-    RegistrationByCardInfo info;
-    static RegistrationByCardInfo replanInfo;
+    static RegistrationByCardInfo info;
 
     @BeforeAll
     static void setUpReplan() {
-        replanInfo = DataGenerator.Registration.generateByCard("ru");
+        info = DataGenerator.Registration.generateByCard("ru");
     }
 
     @BeforeEach
@@ -36,12 +35,12 @@ public class FormTestV1 {
         String meetDate = DataGenerator.Registration.getMeetDate(3);
         String expected = "Встреча успешно запланирована на " + meetDate;
         SelenideElement form = $("form");
-        form.$("[data-test-id=city] input").setValue(replanInfo.getCity());
+        form.$("[data-test-id=city] input").setValue(info.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
         form.$("[data-test-id=date] input").setValue(meetDate);
-        form.$("[data-test-id=name] input").setValue(replanInfo.getName());
-        form.$("[data-test-id=phone] input").setValue(replanInfo.getPhone());
+        form.$("[data-test-id=name] input").setValue(info.getName());
+        form.$("[data-test-id=phone] input").setValue(info.getPhone());
         form.$("[data-test-id=agreement]").click();
         form.$("button.button_view_extra").click();
 
@@ -54,12 +53,12 @@ public class FormTestV1 {
         String meetDate = DataGenerator.Registration.getMeetDate(3);
         String expected = "Встреча успешно запланирована на " + meetDate;
         SelenideElement form = $("form");
-        form.$("[data-test-id=city] input").setValue(replanInfo.getCity());
+        form.$("[data-test-id=city] input").setValue(info.getCity());
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.BACK_SPACE);
         form.$("[data-test-id=date] input").setValue(meetDate);
-        form.$("[data-test-id=name] input").setValue(replanInfo.getName());
-        form.$("[data-test-id=phone] input").setValue(replanInfo.getPhone());
+        form.$("[data-test-id=name] input").setValue(info.getName());
+        form.$("[data-test-id=phone] input").setValue(info.getPhone());
         form.$("[data-test-id=agreement]").click();
         form.$("button.button_view_extra").click();
 
